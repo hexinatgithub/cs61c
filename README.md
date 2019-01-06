@@ -1,5 +1,7 @@
-# CS 61C Fall 2018 Labs
+# berkeley cs61c 2015
 
-**Hello, world!** This repository contains all of my lab work in CS 61C.
+Great Ideas in Computer Architecture (Machine Structures)
 
-- [CS 61C Fall 2018](http://inst.eecs.berkeley.edu/~cs61c/fa18/)
+[course website](http://inst.eecs.berkeley.edu/~cs61c/sp15) contain all course resource
+
+[video playlist](https://www.youtube.com/playlist?list=PLhMnuBfGeCDM8pXLpqib90mDFJI-e1lpk) has course video
