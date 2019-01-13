@@ -136,11 +136,53 @@ const char* go_bears = "GO BEARS!";
 
 int is_commit_msg_ok(const char* msg) {
   /* COMPLETE THE REST */
+  u_int32_t i = 0, j = 0;
+  
+  while(msg[i] != '\0'){
+    if (msg[i] == go_bears[j]) {
+      j++;
+      i++;
+      
+      if (go_bears[j] == '\0') {
+        return 1;
+      }
+      continue;
+    }
+    j = 0;
+    i++;
+  }
+  
   return 0;
 }
 
 void next_commit_id(char* commit_id) {
   /* COMPLETE THE REST */
+  uint32_t i = 0;
+
+  while(commit_id[i] != '\0'){
+
+    switch (commit_id[i]) {
+      case '0':
+      case 'c':
+        commit_id[i] = '6';
+        break;
+      case '6':
+        commit_id[i] = '1';
+        goto End;
+        break;
+      case '1':
+        commit_id[i] = 'c';
+        goto End;
+        break;
+      default:
+        fprintf(stderr, "ERROR: commit id only contain charactors in ['6', '1', 'c'], origin commit id \"%s\"\n", commit_id);
+        break;
+    }
+    
+    i++;
+  }
+
+End: return;
 }
 
 int beargit_commit(const char* msg) {
@@ -149,11 +191,37 @@ int beargit_commit(const char* msg) {
     return 1;
   }
 
+  FILE* findex = fopen(".beargit/.index", "r");
   char commit_id[COMMIT_ID_SIZE];
+  char commit_dir[FILENAME_SIZE];
+  char commit_file[FILENAME_SIZE];
+  char tmp1[FILENAME_SIZE];
+  char tmp2[FILENAME_SIZE];
   read_string_from_file(".beargit/.prev", commit_id, COMMIT_ID_SIZE);
   next_commit_id(commit_id);
 
   /* COMPLETE THE REST */
+  sprintf(commit_dir, ".beargit/%s", commit_id);
+  fs_mkdir(commit_dir);
+
+  sprintf(commit_file, "%s/.index", commit_dir);
+  fs_cp(".beargit/.index", commit_file);
+
+  sprintf(commit_file, "%s/.prev", commit_dir);
+  fs_cp(".beargit/.prev", commit_file);
+
+  while(fgets(tmp2, sizeof(tmp2), findex)) {
+    strtok(tmp2, "\n");
+    sprintf(tmp1, "./%s", tmp2);
+    sprintf(commit_file, "%s/%s", commit_dir, tmp2);
+    fs_cp(tmp1, commit_file);
+  }
+  fclose(findex);
+
+  sprintf(commit_file, "%s/.msg", commit_dir);
+  write_string_to_file(commit_file, msg);
+
+  write_string_to_file(".beargit/.prev", commit_id);
 
   return 0;
 }
