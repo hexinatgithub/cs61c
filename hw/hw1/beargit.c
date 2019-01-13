@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include <unistd.h>
 #include <sys/stat.h>
@@ -96,6 +97,31 @@ int beargit_add(const char* filename) {
 
 int beargit_rm(const char* filename) {
   /* COMPLETE THE REST */
+  FILE* findex = fopen(".beargit/.index", "r");
+  FILE *fnewindex = fopen(".beargit/.newindex", "w");
+
+  char line[FILENAME_SIZE];
+  bool isExist = false;
+  while(fgets(line, sizeof(line), findex)) {
+    strtok(line, "\n");
+    if (strcmp(line, filename) == 0) {
+      isExist = true;
+      continue;
+    }
+
+    fprintf(fnewindex, "%s\n", line);
+  }
+
+  fclose(findex);
+  fclose(fnewindex);
+  
+  if (!isExist) {
+    fprintf(stderr, "ERROR: File %s not tracked\n", filename);
+    fs_rm(".beargit/.newindex");
+    return 1;
+  }
+
+  fs_mv(".beargit/.newindex", ".beargit/.index");
 
   return 0;
 }
@@ -151,6 +177,8 @@ int beargit_status() {
     size++;
   }
   fprintf(stdout, "\n%d files total\n", size);
+
+  fclose(findex);
 
   return 0;
 }
