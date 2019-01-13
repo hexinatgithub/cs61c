@@ -140,7 +140,18 @@ int beargit_commit(const char* msg) {
 
 int beargit_status() {
   /* COMPLETE THE REST */
-  
+  FILE* findex = fopen(".beargit/.index", "r");
+  char line[FILENAME_SIZE];
+  uint32_t size = 0;
+
+  fprintf(stdout, "Tracked files:\n\n");
+  while(fgets(line, sizeof(line), findex)) {
+    strtok(line, "\n");
+    fprintf(stdout, "  %s\n", line);
+    size++;
+  }
+  fprintf(stdout, "\n%d files total\n", size);
+
   return 0;
 }
 
