@@ -257,8 +257,35 @@ int beargit_status() {
  *
  */
 
+void print_beargit_log(char* id) {
+  if (strcmp(id, "0000000000000000000000000000000000000000") == 0) {
+    return;
+  }
+
+  char tmp1[MSG_SIZE];
+  char tmp2[FILENAME_SIZE];
+
+  sprintf(tmp2, ".beargit/%s/.msg", id);
+  read_string_from_file(tmp2, tmp1, MSG_SIZE);
+  fprintf(stdout, "commit %s\n", id);
+  fprintf(stdout, "    %s\n\n", tmp1);
+
+  sprintf(tmp2, ".beargit/%s/.prev", id);
+  read_string_from_file(tmp2, id, COMMIT_ID_SIZE);
+  print_beargit_log(id);
+}
+
 int beargit_log() {
   /* COMPLETE THE REST */
+  char commit_id[COMMIT_ID_SIZE];
 
+  read_string_from_file(".beargit/.prev", commit_id, COMMIT_ID_SIZE);
+  if (strcmp(commit_id, "0000000000000000000000000000000000000000") == 0) {
+    fprintf(stderr, "ERROR: There are no commits!\n");
+    return 1;
+  }
+  
+  fprintf(stdout, "\n");
+  print_beargit_log(commit_id);
   return 0;
 }
