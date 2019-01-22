@@ -1,0 +1,21 @@
+1. What do the .data, .word, .text directives mean (i.e. what do you use them for)?
+.data   Subsequent items stored in Data segment at next available address
+.text   Subsequent items (instructions) stored in Text segment at next available address
+.word   Store the listed value(s) as 32 bit words on word boundary
+
+2. How do you set a breakpoint in MARS? Set a breakpoint on line 14 and run to it. What is the instruction address? Has line 14 executed yet?
+0x00400020
+not yet executed
+
+3. Once at a breakpoint, how do you continue to execute your code? How do you step through your code? Run the code to completion.
+f7
+
+4. Find the "Run I/O" window. What number did the program output? Which fib number is this?
+34
+
+5. At what address is n stored in memory? Try finding this by (1) looking at the Data Segment and (2) looking at the machine code (Code column in the Text Segment).
+0x10010000
+
+8. Lines 19 and 21 use the syscall instruction. What is it and how do you use it? (Hint: look in Help)
+19: display the value stored in $t0 on the console
+21: exit (terminate execution)
