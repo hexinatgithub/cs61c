@@ -9,5 +9,7 @@ Great Ideas in Computer Architecture (Machine Structures)
 # mips compiler
 
 use docker container to run mips gcc compiler, 32-bit ISA
+
 `docker run -it --name mips -v "$(pwd)":/berkeley/cs61c dockcross/linux-mips bash` start container
+
 `$CC --args` use mips-gcc compile code
