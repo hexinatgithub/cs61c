@@ -22,6 +22,7 @@ main:	jal	create_default_list
 	addu	$a0, $s0, $0	# load the address of the first node into $a0
 	# load the address of the function into $a1 (check out la)
 	### YOUR CODE HERE ###
+	la	$a1, square
 	jal	map
 
 	# print "list after: "
@@ -50,16 +51,22 @@ map:
 	# remember that each node is 8 bytes long: 4 for the value followed by 4 for the pointer to next
 	# load the value of the current node into $a0
 	### YOUR CODE HERE ###
+	lw	$a0, 0($s0)
 	# call the function on that value.
 	### YOUR CODE HERE ###
+	jalr $s1
 	# store the returned value back into the node
 	### YOUR CODE HERE ###
+	sw	$v0, 0($s0)
 	# load the address of the next node into $a0
 	### YOUR CODE HERE ###
+	lw	$a0, 4($s0)
 	# put the address of the function back into $a1 to prepare for the recursion
 	### YOUR CODE HERE ###
+	addu	$a1, $s1, $0
 	#recurse
 	### YOUR CODE HERE ###
+	jal map				# jump to map
 
 done:
 	lw	$s0, 8($sp)
