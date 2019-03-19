@@ -67,9 +67,38 @@ main:
 
 first1posshift:
 	### YOUR CODE HERE ###
+	addiu	$sp, $sp, -4
+	sw	$ra, 0($sp)
+
+	beq	$a0, $0, L2	# if a0 == 0
+	slti	$t0, $a0, 0
+	bne	$t0, $0, L3	# $a0 < 0
+	la	$t0, first1posshift
+L1:
+	sll	$a0, $a0, 1
+	jalr	$t0
+	subi	$v0, $v0, 1
+	j	endfirst1pos
+L2:
+	addi	$v0, $0, -1	# return -1
+	j	endfirst1pos
+L3:
+	addi	$v0, $0, 31
+endfirst1pos:
+	lw	$ra, 0($sp)
+	addiu	$sp, $sp, 4
+	jr	$ra
 
 first1posmask:
 	### YOUR CODE HERE ###
+	addiu	$sp, $sp, -4
+	sw	$ra, 0($sp)
+
+	beq	$a0, $0, L2		# if a0 == 0
+	ori	$t0, $a0, 0x80000000
+	beq	$t0, 0x80000000, L3	# $a0 < 0
+	la	$t0, first1posmask
+	j	L1
 
 print_int:
 	move	$a0, $v0
