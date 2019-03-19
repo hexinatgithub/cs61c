@@ -1,3 +1,9 @@
 [submodule "hw"]
 	path = hw
 	url = https://github.com/hexinatgithub/cs61c_hw.git
+	branch = master
+
+[submodule "projects/project1"]
+	path = projects/project1
+	url = https://github.com/hexinatgithub/proj1_starter.git
+	branch = master
