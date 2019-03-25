@@ -1,0 +1,147 @@
+2 Conventions
+
+1. How should $sp be used? When do we add or subtract from $sp?
+$sp used to track stack pointer, we should subtract it when enter a procedure,
+add it when jump back to $ra address
+
+2. Which registers need to be saved or restored before using jr to return from a function?
+$s0-$s7 saved registers, $sp and $fp stack frame registers, $ra return address
+
+3. Which registers need to be saved before using jal?
+$s0-$s7 saved registers, $ra return address, 
+may be some temporaries registers should perserved after function return to use.
+
+4. How do we pass arguments into functions?
+$a0-$a3, arguments on stack
+
+5. What do we do if there are more than four arguments to a function?
+pass arguments on stack
+
+6. How are values returned by functions?
+$v0-$v1 registers
+
+When calling a function in MIPS, who needs to save the following registers to the stack? Answer “caller” for the
+procedure making a function call, “callee” for the function being called, or “N/A” for neither.
+
+$0  N/A     $v* N/A     $a* caller      $t* N/A
+$s* called  $sp N/A     $ra caller
+
+Now assume a function foo (which may be called from a main fucntion) calls another function bar, which is known to
+call some other functions. foo takes one argument and will modify and use $t0 and $s0. bar takes two arguments,
+returns an integer, and uses $t0-$t2 and $s0-$s1. In the boxes below, draw a possible ordering of the stack just
+before bar calls a function. The top left box is the address of $sp when foo is first called, and the stack goes
+downwards, continuing at each next column. Add ‘(f)’ if the register is stored by foo and ‘(b)’ if the register is
+stored by bar. The first one is written in for you.
+
+1   $ra(f)
+2   $ra(b)
+3   $s0(b)
+4   $s1(b)
+
+3 A Guide to Writing Functions
+
+FunctionFoo: # PROLOGUE
+# begin by reserving space on the stack
+addiu $sp, $sp, -FrameSize
+# now, store needed registers
+sw $ra, 0($sp)
+sw $s0, 4($sp)
+...
+# BODY
+...
+# EPILOGUE
+# restore registers
+lw $s0 4($sp)
+lw $ra 0($sp)
+# release stack spaces
+addiu $sp, $sp, FrameSize
+# return to normal execution
+jr $ra
+
+4 C to MIPS
+
+1. Assuming $a0 and $a1 hold integer pointers, swap the values they point to via the stack and return control.
+
+void swap(int *a, int *b) {
+    int tmp = *a;
+    *a = *b;
+    *b = tmp;
+}
+
+addiu $sp, $sp, -4
+sw $ra, 0($sp)
+lw $t0, 0($a0) // $t0=*a
+lw $t1, 0($a1) // $t1=*b
+sw $t1, 0($a0) // *a=*b
+sw $t0, 0($a1) // *b=tmp
+addiu $sp, $sp, 4
+jr $ra
+
+2. Translate the following algorithm that finds the sum of the numbers from 0 to N to MIPS assembly. Assume
+$s0 holds N, $s1 holds sum, and that N is greater than or equal to 0.
+
+int sum = 0;
+if (N==0) return 0;
+    while (N != 0) {
+    sum += N;
+    N--;
+}
+return sum;
+
+bne $s0, $zero, L1
+add $v0, $zero, $zero
+jr $ra
+L1:
+beq $s0, $zero, L2
+add $s1, $s1, $s0
+subi $s0, $s0, -1
+j L1
+L2:
+add $v0, $s1, $zero
+jr $ra
+
+3. What must be done to make the adding algorithm from the previous part into a callable MIPS function?
+reserving and release space in stack.
+
+5.2 Exercises
+
+1. What is the Stored Program concept and what does it enable us to do?
+
+programs are often shipped as files of binary numbers.
+system allow multiple process run in the same time, each perform in sequence or intermittently, 
+just tell computer to begin executing at a given location in memery.
+
+2. How many passes through the code does the Assembler have to make? Why?
+2 pass.
+First pass:
+* Checks the syntax of the instruction or directive. It faults if there is an error in the syntax, 
+  for example if a label is specified on a directive that does not accept one.
+* Determines the size of the instruction and data being assembled and reserves space.
+* Determines memory addresses of labels within sections.
+* Creates a symbol table containing label definitions and their memory addresses.
+Second pass:
+* Faults if an undefined reference is specified in an instruction operand or directive.
+* Encodes the instructions using the label offsets from pass 1, where applicable.
+* Generates relocations.
+* Generates debug information if requested.
+* Outputs the object file.
+
+3. What are the different parts of the object files output by the Assembler?
+* The object file header describes the size and position of the other pieces of the object file.
+* The text segment contains the machine language code.
+* The static data segment contains data allocated for the life of the program.
+* The relocation information identifies instructions and data words that depend on absolute addresses
+  when the program is loaded into memory.
+* The symbol table List of the files labels and data that can be referenced.
+
+4. Which step in CALL resolves relative addressing? Absolute addressing?
+Assembler resolved relative addressing.
+Linker resolved absolute addressing.
+
+5. What step in CALL may make use of the $at register?
+Assembler.
+
+6. What does RISC stand for? How is this related to pseudoinstructions?
+Reduced Instruction Set Computing. Minimal set of instructions leads to many lines of code. 
+Pseudoinstruc-tions are more complex instructions intended to make assembly programming easier for the coder. 
+These areconverted to TAL by the assembler.
