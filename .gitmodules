@@ -7,3 +7,9 @@
 	path = projects/project1
 	url = https://github.com/hexinatgithub/proj1_starter.git
 	branch = master
+
+
+[submodule "projects/project2"]
+	path = projects/project2
+	url = https://github.com/hexinatgithub/proj2_starter.git
+	branch = master
