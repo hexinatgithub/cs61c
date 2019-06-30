@@ -1,0 +1,38 @@
+How big is your cache block? How many consecutive accesses fit within a single block?
+How big is your cache? How many jumps do you need to make before you "wrap around?"
+What is your cache's associativity? Where can a particular block fit?
+Have you accessed this piece of data before? If so, is it still in the cache or not?
+
+Scenario 1:
+2 words cache blocks, 2.
+8 words, 1.
+1, block 0.
+Yes, not in the cache.
+
+1. What combination of parameters is producing the hit rate you observe? (Hint: Your answer should be of the form: "Because parameter A == parameter B")
+Because Array Size == Step Size == Rep Count.
+
+2. What is our hit rate if we increase Rep Count arbitrarily? Why?
+The same, the cache entry will be evict in the loop.
+
+3. How could we modify our program parameters to maximize our hit rate?
+set Step Size = 32.
+
+Scenario 2:
+4 words, 4
+64 words, 32
+4 set-associativity, 4 cadidate block
+no, is not in cache
+
+1. Explain the hit rate in terms of the parameters of the cache and the program.
+cache total size is 256 bytes, whole array will fit in cache, block size is 16 bytes, so 256 need 16 total memory accesses
+2. What happens to our hit rate as Rep Count goes to infinity? Why?
+increase
+3. block iteration
+
+Scenario 3:
+1. Run the simulation a few times. Note that the hit rate is non-deterministic. Why is this the case? Explain in terms of the cache parameters and our access pattern. ("The program is accessing random indicies" is not a sufficient answer).
+step size is 8, so random offset may be in cache block or next memory block.
+
+2. Which Cache parameter can you modify in order to get a constant hit rate? Record the parameter and its value (and be prepared to show your TA a few runs of the simulation). How does this parameter allow us to get a constant hit rate?
+step size = 4
