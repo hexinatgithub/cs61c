@@ -36,3 +36,14 @@ step size is 8, so random offset may be in cache block or next memory block.
 
 2. Which Cache parameter can you modify in order to get a constant hit rate? Record the parameter and its value (and be prepared to show your TA a few runs of the simulation). How does this parameter allow us to get a constant hit rate?
 step size = 4
+
+Exercise 2: Loop Ordering and Matrix Multiplication
+
+a. Which ordering(s) perform best for 1000-by-1000 matrices?
+jki
+
+b. Which ordering(s) perform the worst?
+ikj
+
+c. How does the way we stride through the matrices with respect to the innermost loop affect performance?
+jki will exhibit B matrix temporal locality, exhibit A matrix spatial locality.
