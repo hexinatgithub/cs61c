@@ -47,3 +47,12 @@ ikj
 
 c. How does the way we stride through the matrices with respect to the innermost loop affect performance?
 jki will exhibit B matrix temporal locality, exhibit A matrix spatial locality.
+
+Exercise 3: Cache Blocking and Matrix Transposition
+
+Fix the blocksize to be 20, and run your code with n equal to 100, 1000, 2000, 5000, and 10000. At what point does cache blocked version of transpose become faster than the non-cache blocked version? Why does cache blocking require the matrix to be a certain size before it outperforms the non-cache blocked code?
+1000, when whole matrix can't hold in the cache, the cache will hold the small subset block.
+
+Fix n to be 10000, and run your code with blocksize equal to 50, 100, 500, 1000, 5000. How does performance change as the blocksize increases? Why is this the case?
+when blocksize is small, can read from memory time will overlap, the time to retrive all block will be small.
+when blocksize is big, cache can't hold the all block, first read cache will be evict when after read cache come.
